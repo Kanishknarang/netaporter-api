@@ -59,17 +59,11 @@ class Process:
         Then it goes through all the similar products of the given competiton, Extracts basket price of each similar product,
         Calculates discount diff based on formula : ((basket_price - similar_product_basket_price)/((basket_price + similar_product_basket_price)/2))*100
         Then it checks if the discount diff is >,==,<  dis count_dif_operand2 based on the operator.
-         the condition is true for even one on the similar products it return true.
+        If the condition is true for even one of the similar products it return true.
         If none of the similar products is satisfies the condition it returns false."""
 
-        
-        discount_diff = 0
-        similar_product_basket_price = 0
         #extracting basket_price
         basket_price = product['price']['basket_price']['value']
-
-        #flag variable        
-        f=1
         
         #traversing through all the similar products of the given competition
         for knn_item in  product['similar_products']['website_results'][competition]['knn_items']:
@@ -97,6 +91,8 @@ class Process:
         return False
                 
     def check_filters(self, product):
+
+        """this function applies all the filters to a product and returns true if all the filters are passed else false """
         
         #initializing variables
         #as competition and discount diff self.filters are applied together, we need to get both of them from request before applying them.there is no particular
@@ -209,7 +205,7 @@ class Process:
                 discount_sum += discount
                 print(product['brand']['name'])
                 print(discount)      
-        print({"discounted_products_count": product_count, "avg_dicount": (discount_sum/product_count if product_count != 0 else discount_sum)})
+
         return jsonify({"discounted_products_count": product_count, "avg_dicount": (discount_sum/product_count if product_count != 0 else discount_sum)}) 
 
 
@@ -218,7 +214,7 @@ class Process:
         """This function is used when the query_type is expencive_list.
         It traverses through all the products in the data.
         For each product it applies all the filters.
-        If the product passes all the filters then it checks if its basket price is greater than any of its competitions.
+        If the product passes all the filters then it checks if its basket price is greater than anyone of its competitions.
         if it is so the product id is added to the result list."""
 
 
